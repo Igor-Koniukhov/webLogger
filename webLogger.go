@@ -21,8 +21,7 @@ var (
 	White       = "\033[37m"
 )
 
-type LogStruct struct {
-}
+type LogStruct struct {}
 
 func Info(alarmType string, n int, message string, params interface{}) {
 

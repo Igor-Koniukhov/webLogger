@@ -31,7 +31,7 @@ type of writing (file or stndOut);
  </code>
  
  
- - Each function message in the stndOut have own set of colors (exception ClientError, ServerError);
+ - Each message of functions in the stndOut have own set of colors (exception ClientError, ServerError);
  ### Installation
  
  This package requeres Go 1.12 or newer.
