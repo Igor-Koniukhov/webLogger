@@ -6,19 +6,31 @@ import (
 	"os"
 )
 
-func InfoLog (file, stdOut bool, message string, params interface{}) {
+var (
+	colorReset  = "\033[0m"
+	colorRed    = "\033[31m"
+	colorGreen  = "\033[32m"
+	colorYellow = "\033[33m"
+	colorBlue   = "\033[34m"
+	colorPurple = "\033[35m"
+	colorCyan   = "\033[36m"
+	colorWhite  = "\033[37m"
+)
+
+func InfoLog(file, stdOut bool, message string, params interface{}) {
 	if file {
 		fl, err := os.OpenFile("info_log.txt", os.O_CREATE|os.O_APPEND|os.O_RDWR, 0765)
 		checkLogFileError(fl, err)
 		defer fl.Close()
 		l := log.New(fl, "INFO:\t", log.Ldate|log.Ltime|log.Lshortfile)
-		l.Println( message, params)
+		l.Println(message, params)
 	}
-	if stdOut{
-
+	if stdOut {
+		fmt.Print(colorBlue, "LOGGER says ")
+		fmt.Print(colorPurple)
 		lstd := log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
 
-		lstd.Println(message, params)
+		lstd.Println(colorWhite, message, colorGreen, params)
 	}
 }
 
@@ -34,9 +46,9 @@ func Fatal(message string, params interface{}) {
 	fmt.Println("Log fatal: message", message, " params: ", params)
 }
 
-func checkLogFileError(fl *os.File, err error)  {
+func checkLogFileError(fl *os.File, err error) {
 
 	if err != nil {
-		fmt.Println( "Could'n open ", fl,  err)
+		fmt.Println("Could'n open ", fl, err)
 	}
 }
