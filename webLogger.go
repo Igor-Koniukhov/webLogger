@@ -6,88 +6,60 @@ import (
 	"net/http"
 	"os"
 	"runtime/debug"
+	"strings"
 )
 
 var (
-	colorReset  = "\033[0m"
-	colorRed    = "\033[31m"
-	colorGreen  = "\033[32m"
-	colorYellow = "\033[33m"
-	colorBlue   = "\033[34m"
-	colorPurple = "\033[35m"
-	colorCyan   = "\033[36m"
-	colorWhite  = "\033[37m"
+	Reset       = "\033[0m"
+	brightWhite = "\033[30m"
+	Red         = "\033[31m"
+	Green       = "\033[32m"
+	Yellow      = "\033[33m"
+	Blue        = "\033[34m"
+	Purple      = "\033[35m"
+	Cyan        = "\033[36m"
+	White       = "\033[37m"
 )
 
-func InfoLog(file, stdOut bool, message string, params interface{}) {
-	if file {
-		fl, err := os.OpenFile("info_log.txt", os.O_CREATE|os.O_APPEND|os.O_RDWR, 0765)
+type LogStruct struct {
+}
+
+func Info(alarmType string, n int, message string, params interface{}) {
+
+	alarmMap := map[string]string{
+		"info":    "\033[34m",
+		"warning": "\033[33m",
+		"error":   "\033[31m",
+		"fatal":   "\033[31m",
+	}
+	alT := strings.ToLower(alarmType)
+	alarmColor := alarmMap[alT]
+
+	if n == 1 || n == 3 {
+		fl, err := os.OpenFile("info_"+strings.ToLower(alT)+".log", os.O_CREATE|os.O_APPEND|os.O_RDWR, 0765)
 		checkLogFileError(fl, err)
 		defer fl.Close()
-		l := log.New(fl, "INFO:\t", log.Ldate|log.Ltime|log.Lshortfile)
+		l := log.New(fl, alarmType+":\t", log.Ldate|log.Ltime|log.Lshortfile)
 		l.Println(message, params)
 	}
-	if stdOut {
-		fmt.Print(colorBlue, "LOGGER says ")
-		fmt.Print(colorPurple)
-		lstd := log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
+	if n == 2 || n == 3 {
+		switch n {
+		case 3:
+			fmt.Print(Blue, "LOG"+Yellow+"GER "+brightWhite+"says ")
+		default:
+			fmt.Print(brightWhite, "LOGGER says ")
+		}
+		fmt.Print(alarmColor)
+		lstd := log.New(os.Stdout, alarmType+": ", log.Ldate|log.Ltime|log.Lshortfile)
+		switch alT {
+		case "fatal":
+			lstd.Println(Red, message, params)
+		default:
+			lstd.Println(White, message, Green, params)
+		}
 
-		lstd.Println(colorWhite, message, colorGreen, params)
-	}
-}
-
-func ErrorLog(file, stdOut bool, message string, params interface{}) {
-	if file {
-		fl, err := os.OpenFile("error_log.txt", os.O_CREATE|os.O_APPEND|os.O_RDWR, 0765)
-		checkLogFileError(fl, err)
-		defer fl.Close()
-		l := log.New(fl, "ERROR:\t", log.Ldate|log.Ltime|log.Lshortfile)
-		l.Println( message, params)
-	}
-	if stdOut{
-		fmt.Print(colorBlue, "LOGGER says ")
-		fmt.Print(colorRed)
-		lstd := log.New(os.Stdout, "ERROR!: ", log.Ldate|log.Ltime|log.Lshortfile)
-		lstd.Println(colorWhite, message, colorGreen, params)
 	}
 
-}
-
-func WarningLog(file, stdOut bool, message string, params interface{}) {
-	if file {
-		fl, err := os.OpenFile("warning_log.txt", os.O_CREATE|os.O_APPEND|os.O_RDWR, 0765)
-		checkLogFileError(fl, err)
-		defer fl.Close()
-
-		l := log.New(fl, "WARNING:\t", log.Ldate|log.Ltime|log.Lshortfile)
-		l.Println( message, params)
-	}
-	if stdOut{
-		fmt.Print(colorBlue, "LOGGER says ")
-		fmt.Print(colorYellow)
-		lstd := log.New(os.Stdout, "WARNING!: ", log.Ldate|log.Ltime|log.Lshortfile)
-
-		lstd.Println(colorWhite, message, colorGreen, params)
-	}
-
-}
-
-func FatalLog(file, stdOut bool, message string, params interface{}) {
-	if file {
-		fl, err := os.OpenFile("fatal_log.txt", os.O_CREATE|os.O_APPEND|os.O_RDWR, 0765)
-		checkLogFileError(fl, err)
-		defer fl.Close()
-
-		l := log.New(fl, "FATAL:\t", log.Ldate|log.Ltime|log.Lshortfile)
-		l.Panic( message, params)
-	}
-	if stdOut{
-		fmt.Print(colorBlue, "LOGGER says ")
-		fmt.Print(colorRed)
-		lstd := log.New(os.Stdout, "FATAL!: ", log.Ldate|log.Ltime|log.Lshortfile)
-
-		lstd.Panic( message, params)
-	}
 }
 
 func ClientError(w http.ResponseWriter, status int) {
