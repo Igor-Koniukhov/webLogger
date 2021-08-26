@@ -1,8 +1,8 @@
 ## Weblogger v2.0.0
 ### Features
-- InfoLog, ErrorLog, WarningLog, FatalLog, ClientError, ServerError - able writing log information in file and/or stndOut;
-- In moment initiation creates files for accepting and writing messages (info_lot.txt, erro_log.txt...);
-- Each function can be customised by adding messages, parameters (just error at that moment), and switching between 
+- INFO, ERROR, WANING, FATAL, ClientError, ServerError - able writing log information in file and/or stndOut;
+- In moment initiation creates files for accepting and writing messages (info.log, error.log, warning.log...);
+- Each function can be customised by adding type of alarm, messages, parameters (just error at that moment), and switching between 
 type of writing (file or stndOut);
 ### Example 
 
