@@ -35,7 +35,7 @@ func Info(alarmType string, n int, message string, params interface{}) {
 	alarmColor := alarmMap[alT]
 
 	if n == 1 || n == 3 {
-		fl, err := os.OpenFile("info_"+strings.ToLower(alT)+".log", os.O_CREATE|os.O_APPEND|os.O_RDWR, 0765)
+		fl, err := os.OpenFile("info_"+alT+".log", os.O_CREATE|os.O_APPEND|os.O_RDWR, 0765)
 		checkLogFileError(fl, err)
 		defer fl.Close()
 		l := log.New(fl, alarmType+":\t", log.Ldate|log.Ltime|log.Lshortfile)
