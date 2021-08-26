@@ -29,6 +29,9 @@ type of writing (file or stndOut);
         		weblogger.Info("ERROR",3,  "could not write on webpage", err)
         	}     	
  </code>
+ <br/>
+ <br/>    
+ 
  
  
  - Each message of functions in the stndOut have own set of colors (exception ClientError, ServerError);
