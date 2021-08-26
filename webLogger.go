@@ -74,7 +74,7 @@ func WarningLog(file, stdOut bool, message string, params interface{}) {
 
 func FatalLog(file, stdOut bool, message string, params interface{}) {
 	if file {
-		fl, err := os.OpenFile("warning_log.txt", os.O_CREATE|os.O_APPEND|os.O_RDWR, 0765)
+		fl, err := os.OpenFile("fatal_log.txt", os.O_CREATE|os.O_APPEND|os.O_RDWR, 0765)
 		checkLogFileError(fl, err)
 		defer fl.Close()
 
