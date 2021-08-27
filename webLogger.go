@@ -21,10 +21,11 @@ var (
 	White       = "\033[37m"
 )
 
-type LogStruct struct {}
+type LogStruct struct{}
 
-func Info(alarmType string, n int, message string, params interface{}) {
-
+func Info(alarmType, filePath string, n int, message string, params interface{}) {
+	err := os.MkdirAll(filePath, 0755)
+	checkLogFileError(err)
 	alarmMap := map[string]string{
 		"info":    "\033[34m",
 		"warning": "\033[33m",
@@ -35,8 +36,8 @@ func Info(alarmType string, n int, message string, params interface{}) {
 	alarmColor := alarmMap[alT]
 
 	if n == 1 || n == 3 {
-		fl, err := os.OpenFile("info_"+alT+".log", os.O_CREATE|os.O_APPEND|os.O_RDWR, 0765)
-		checkLogFileError(fl, err)
+		fl, err := os.OpenFile(filePath+"/logger_info.log", os.O_CREATE|os.O_APPEND|os.O_RDWR, 0644)
+		checkLogFileError(err)
 		defer fl.Close()
 		l := log.New(fl, alarmType+":\t", log.Ldate|log.Ltime|log.Lshortfile)
 		l.Println(message, params)
@@ -74,8 +75,8 @@ func ServerError(w http.ResponseWriter, err error) {
 	http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 }
 
-func checkLogFileError(fl *os.File, err error) {
+func checkLogFileError(err error) {
 	if err != nil {
-		fmt.Println("Could'n open ", fl, err)
+		fmt.Println("Could'n open file", err)
 	}
 }
