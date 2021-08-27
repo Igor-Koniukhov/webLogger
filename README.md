@@ -42,7 +42,7 @@ type of writing (file or stndOut);
  
  This package requeres Go 1.12 or newer.
 <code>
-go get github.com/igor-koniukhov/webLogger
+go get -u github.com/igor-koniukhov/webLogger/v2
 </code>
 
 - ClientError, ServerError - in development at that moment;
