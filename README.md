@@ -28,7 +28,7 @@ type of writing (file or stndOut);
 - err - the error that needs to be checks;
 
  <code> 
- if err ==nil {
+ if err !=nil {
  		webLogger.Info("ERROR","./log/logger", 3, "custom info", err)
  	}
  </code>
