@@ -17,7 +17,7 @@ import (
 var (
 	Reset       = "\033[0m"
 	brightWhite = "\033[30m"
-	Red         = "\x1b[31;1m"
+	Red         = "\033[31m"
 	Green       = "\033[32m"
 	Yellow      = "\033[33m"
 	Blue        = "\033[34m"
@@ -27,7 +27,6 @@ var (
 )
 
 const (
-	tFormat        = "2006/01/02 15:04:05"
 	Info           = "INFO"
 	Warning        = "WARNING"
 	Error          = "ERROR"
@@ -101,7 +100,7 @@ func(l LogStruct) defaultData() (filePath, logFile, timeFormat string,  outWrite
 	}
 	switch l.LogParameters.TimeFormat {
 	case "":
-		timeFormat = tFormat
+		timeFormat = "2006/01/02 15:04:05"
 		l.LogParameters.TimeFormat = timeFormat
 	default :
 		timeFormat = l.LogParameters.TimeFormat
