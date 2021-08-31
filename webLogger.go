@@ -78,7 +78,7 @@ func NewLogStruct(logStructParameters *LogParameters) *LogStruct {
 func NewLog(ls *LogStruct) {
 	Log = ls
 }
-func (l LogStruct) timeGenerator(timeFormat string) (t string) {
+func (l *LogStruct) timeGenerator(timeFormat string) (t string) {
 	t = time.Now().UTC().Format(timeFormat)
 	return
 }
@@ -93,7 +93,7 @@ func (l *LogStruct) getLocationPointer() (result string) {
 	result = fmt.Sprintf(" %s:%d ", fileName, line)
 	return
 }
-func (l LogStruct) defaultData() (filePath, logFile, timeFormat string, outWriter int) {
+func (l *LogStruct) defaultData() (filePath, logFile, timeFormat string, outWriter int) {
 	switch l.LogParameters.FilePath {
 	case "":
 		filePath = "./logger"
@@ -125,21 +125,22 @@ func (l LogStruct) defaultData() (filePath, logFile, timeFormat string, outWrite
 	return
 }
 
-func (l LogStruct) infoWriter(alarmType string, param interface{}) {
+func (l *LogStruct) infoWriter(alarmType string, param interface{}) {
 	mutual.Lock()
 	defer mutual.Unlock()
 
 	filePath, logFile, timeFormat, outWriter := l.defaultData()
 	timePointer := l.timeGenerator(timeFormat)
 	location := l.getLocationPointer()
+	err := os.MkdirAll(filePath, 0755)
+	checkLogFileError(err)
+	fl, err := os.OpenFile(filePath+logFile, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0644)
+	defer fl.Close()
+	checkLogFileError(err)
 
 	if param == nil {
 		param = ""
 	}
-
-	err := os.MkdirAll(filePath, 0755)
-	checkLogFileError(err)
-
 	alarmMap := map[string]string{
 		"info":    BlueB,
 		"warning": YellowB,
@@ -151,9 +152,7 @@ func (l LogStruct) infoWriter(alarmType string, param interface{}) {
 	alarmColor := alarmMap[alT]
 
 	if outWriter == 1 || outWriter == 3 {
-		fl, err := os.OpenFile(filePath+logFile, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0644)
-		defer fl.Close()
-		checkLogFileError(err)
+
 		fileStmt := fmt.Sprintf(" %s %s %v %s \n", alarmType, timePointer, param, location)
 
 		io.Copy(fl, strings.NewReader(fileStmt))
@@ -175,36 +174,35 @@ func (l LogStruct) infoWriter(alarmType string, param interface{}) {
 
 }
 
-func (l LogStruct) ClientError(w http.ResponseWriter, status int) {
+func (l *LogStruct) ClientError(w http.ResponseWriter, status int) {
 	msg := fmt.Sprintf("Client error with status of %v ", status)
 	l.infoWriter(Err, msg)
 	http.Error(w, http.StatusText(status), status)
 }
 
-func (l LogStruct) ServerError(w http.ResponseWriter, err error) {
+func (l *LogStruct) ServerError(w http.ResponseWriter, err error) {
 	trace := fmt.Sprintf("%s\n%s", err.Error(), debug.Stack())
 	l.infoWriter(Err, trace)
 	http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 }
 
-func (l LogStruct) Debug(err error) {
+func (l *LogStruct) Debug(err error) {
 	trace := fmt.Sprintf("%s\n%s", err.Error(), debug.Stack())
 	l.infoWriter(Dbg, fmt.Sprint(trace))
 }
 
-func (l LogStruct) Error(message ...interface{}) {
+func (l *LogStruct) Error(message ...interface{}) {
 	l.infoWriter(Err, fmt.Sprint(message...))
 }
-func (l LogStruct) Info(message ...interface{}) {
+func (l *LogStruct) Info(message ...interface{}) {
 	l.infoWriter(Inf, fmt.Sprint(message...))
 }
-func (l LogStruct) Warning(message ...interface{}) {
+func (l *LogStruct) Warning(message ...interface{}) {
 	l.infoWriter(Wrn, fmt.Sprint(message...))
 }
-func (l LogStruct) Fatal(message ...interface{}) {
+func (l *LogStruct) Fatal(message ...interface{}) {
 	l.infoWriter(Ftl, fmt.Sprint(message...))
 }
-
 
 
 func checkLogFileError(err error) {
