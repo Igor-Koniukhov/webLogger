@@ -200,12 +200,10 @@ func (l *LogStruct) Error(err error, message ...interface{}) {
 	}
 
 }
-func (l *LogStruct) Info(err error, message ...interface{}) {
-	if err != nil {
-		l.infoWriter(Inf, fmt.Sprint(message...))
-	}
-
+func (l *LogStruct) Info(message ...interface{}) {
+	l.infoWriter(Inf, fmt.Sprint(message...))
 }
+
 func (l *LogStruct) Warning(err error, message ...interface{}) {
 	if err != nil {
 		l.infoWriter(Wrn, fmt.Sprint(message...))
