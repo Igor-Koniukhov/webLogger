@@ -161,9 +161,7 @@ func (l *LogStruct) infoWriter(alarmType string, param interface{}) {
 		default:
 			fmt.Print(brightWhite, "W:")
 		}
-
 		consoleStmt := fmt.Sprintf("|%s|%s %v%s %s%s %s \n", alarmType, Reset, param, Blue, timePointer, location, Reset)
-
 		io.Copy(os.Stdout, strings.NewReader(alarmColor+consoleStmt+Reset))
 
 	}
@@ -191,7 +189,6 @@ func (l *LogStruct) Debug(err error) {
 		trace := fmt.Sprintf("%s\n%s", err.Error(), debug.Stack())
 		l.infoWriter(Dbg, fmt.Sprint(trace))
 	}
-
 }
 
 func (l *LogStruct) Error(err error, message ...interface{}) {
