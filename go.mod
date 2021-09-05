@@ -1,3 +1,3 @@
-module github.com/igor-koniukhov/webLogger/v2@v2.1.2
+module github.com/igor-koniukhov/webLogger/v3
 
 go 1.16
