@@ -1,4 +1,4 @@
-## Weblogger 2.1.2
+## Weblogger 2.1.3
 ### Features
 - INFO, ERROR, WANING, FATAL, ClientError, ServerError - able writing log information in file and/or stndOut;;
 - In moment initiation creates file for accepting and writing messages (logger_info.log);;
