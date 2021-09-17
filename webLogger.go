@@ -170,55 +170,40 @@ func (l *LogStruct) infoWriter(alarmType string, param interface{}) {
 
 }
 
-func (l *LogStruct) ClientError(w http.ResponseWriter, status int, err error) {
-	if err != nil {
-		msg := fmt.Sprintf("Client error with status of %v ", status)
-		l.infoWriter(Err, msg)
-		http.Error(w, http.StatusText(status), status)
-	}
+func (l *LogStruct) ClientError(w http.ResponseWriter, status int) {
+	msg := fmt.Sprintf("Client error with status of %v ", status)
+	l.infoWriter(Err, msg)
+	http.Error(w, http.StatusText(status), status)
 }
 
 func (l *LogStruct) ServerError(w http.ResponseWriter, err error) {
-	if err != nil {
-		trace := fmt.Sprintf("%s\n%s", err.Error(), debug.Stack())
-		l.infoWriter(Err, trace)
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-	}
+	trace := fmt.Sprintf("%s\n%s", err.Error(), debug.Stack())
+	l.infoWriter(Err, trace)
+	http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 }
 
 func (l *LogStruct) Debug(err error) {
-	if err != nil {
-		trace := fmt.Sprintf("%s\n%s", err.Error(), debug.Stack())
-		l.infoWriter(Dbg, fmt.Sprint(trace))
-	}
-
+	trace := fmt.Sprintf("%s\n%s", err.Error(), debug.Stack())
+	l.infoWriter(Dbg, fmt.Sprint(trace))
 }
 
-func (l *LogStruct) Error(err error, message ...interface{}) {
-	if err != nil {
-		l.infoWriter(Err, fmt.Sprint(message...))
-	}
-
+func (l *LogStruct) Error(message ...interface{}) {
+	l.infoWriter(Err, fmt.Sprint(message...))
 }
+
 func (l *LogStruct) Info(message ...interface{}) {
 	l.infoWriter(Inf, fmt.Sprint(message...))
 }
 
-func (l *LogStruct) Warning(err error, message ...interface{}) {
-	if err != nil {
-		l.infoWriter(Wrn, fmt.Sprint(message...))
-	}
-
+func (l *LogStruct) Warning(message ...interface{}) {
+	l.infoWriter(Wrn, fmt.Sprint(message...))
 }
-func (l *LogStruct) Fatal(err error, message ...interface{}) {
-	if err != nil {
-		l.infoWriter(Ftl, fmt.Sprint(message...))
-	}
+
+func (l *LogStruct) Fatal(message ...interface{}) {
+	l.infoWriter(Ftl, fmt.Sprint(message...))
 }
 
 func checkLogFileError(err error) {
-	if err != nil {
-		lp := log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
-		lp.Println(Red, "Could'n open file", err)
-	}
+	lp := log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	lp.Println(Red, "Could'n open file", err)
 }
