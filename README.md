@@ -1,4 +1,6 @@
+
 ## Weblogger 2.1.3
+
 ### Features
 - INFO, ERROR, WANING, FATAL, ClientError, ServerError - able writing log information in file and/or stndOut;;
 - In moment initiation creates file for accepting and writing messages (logger_info.log);;
@@ -36,16 +38,15 @@ Initialization in main func.
     webLogger.Log.Warning(message ...interface{})
     webLogger.Log.Fatal(message ...interface{})
  ```
+
  
  
  
- - Each function message in the stndOut have own set of colors (exception ClientError, ServerError);
+ - Each message of functions in the stndOut have own set of colors (exception ClientError, ServerError);
  ### Installation
  
  This package requeres Go 1.12 or newer.
-```ruby
-    go get -u github.com/igor-koniukhov/webLogger/v2
-```
 
+go get -u github.com/igor-koniukhov/webLogger/v2
 
 
