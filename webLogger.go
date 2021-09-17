@@ -190,9 +190,11 @@ func (l *LogStruct) Error( message ...interface{}) {
 func (l *LogStruct) Info(message ...interface{}) {
 	l.infoWriter(Inf, fmt.Sprint(message...))
 }
+
 func (l *LogStruct) Warning( message ...interface{}) {
 		l.infoWriter(Wrn, fmt.Sprint(message...))
 }
+
 func (l *LogStruct) Fatal( message ...interface{}) {
 		l.infoWriter(Ftl, fmt.Sprint(message...))
 }
