@@ -161,9 +161,7 @@ func (l *LogStruct) infoWriter(alarmType string, param interface{}) {
 		default:
 			fmt.Print(brightWhite, "W:")
 		}
-
 		consoleStmt := fmt.Sprintf("|%s|%s %v%s %s%s %s \n", alarmType, Reset, param, Blue, timePointer, location, Reset)
-
 		io.Copy(os.Stdout, strings.NewReader(alarmColor+consoleStmt+Reset))
 
 	}
@@ -186,24 +184,24 @@ func (l *LogStruct) Debug(err error) {
 	trace := fmt.Sprintf("%s\n%s", err.Error(), debug.Stack())
 	l.infoWriter(Dbg, fmt.Sprint(trace))
 }
-
-func (l *LogStruct) Error(message ...interface{}) {
+func (l *LogStruct) Error( message ...interface{}) {
 	l.infoWriter(Err, fmt.Sprint(message...))
 }
-
 func (l *LogStruct) Info(message ...interface{}) {
 	l.infoWriter(Inf, fmt.Sprint(message...))
 }
 
-func (l *LogStruct) Warning(message ...interface{}) {
+func (l *LogStruct) Warning( message ...interface{}) {
 	l.infoWriter(Wrn, fmt.Sprint(message...))
 }
 
-func (l *LogStruct) Fatal(message ...interface{}) {
+func (l *LogStruct) Fatal( message ...interface{}) {
 	l.infoWriter(Ftl, fmt.Sprint(message...))
 }
 
 func checkLogFileError(err error) {
-	lp := log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
-	lp.Println(Red, "Could'n open file", err)
+	if err != nil {
+		lp := log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+		lp.Println(Red, "Could'n open file", err)
+	}
 }
