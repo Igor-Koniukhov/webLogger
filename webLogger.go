@@ -1,4 +1,4 @@
-package webLogger
+   package webLogger
 
 import (
 	"fmt"
@@ -169,34 +169,34 @@ func (l *LogStruct) infoWriter(alarmType string, param interface{}) {
 }
 
 func (l *LogStruct) ClientError(w http.ResponseWriter, status int) {
-	msg := fmt.Sprintf("Client error with status of %v ", status)
-	l.infoWriter(Err, msg)
-	http.Error(w, http.StatusText(status), status)
+		msg := fmt.Sprintf("Client error with status of %v ", status)
+		l.infoWriter(Err, msg)
+		http.Error(w, http.StatusText(status), status)
 }
 
 func (l *LogStruct) ServerError(w http.ResponseWriter, err error) {
-	trace := fmt.Sprintf("%s\n%s", err.Error(), debug.Stack())
-	l.infoWriter(Err, trace)
-	http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		trace := fmt.Sprintf("%s\n%s", err.Error(), debug.Stack())
+		l.infoWriter(Err, trace)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 }
 
 func (l *LogStruct) Debug(err error) {
-	trace := fmt.Sprintf("%s\n%s", err.Error(), debug.Stack())
-	l.infoWriter(Dbg, fmt.Sprint(trace))
+		trace := fmt.Sprintf("%s\n%s", err.Error(), debug.Stack())
+		l.infoWriter(Dbg, fmt.Sprint(trace))
 }
 func (l *LogStruct) Error( message ...interface{}) {
-	l.infoWriter(Err, fmt.Sprint(message...))
+		l.infoWriter(Err, fmt.Sprint(message...))
 }
 func (l *LogStruct) Info(message ...interface{}) {
 	l.infoWriter(Inf, fmt.Sprint(message...))
 }
 
 func (l *LogStruct) Warning( message ...interface{}) {
-	l.infoWriter(Wrn, fmt.Sprint(message...))
+		l.infoWriter(Wrn, fmt.Sprint(message...))
 }
 
 func (l *LogStruct) Fatal( message ...interface{}) {
-	l.infoWriter(Ftl, fmt.Sprint(message...))
+		l.infoWriter(Ftl, fmt.Sprint(message...))
 }
 
 func checkLogFileError(err error) {
